@@ -112,9 +112,12 @@ namespace CppSharp.Generators.CSharp
                     break;
                 case DocumentationCommentKind.TextComment:
                     var lastTextsection = sections.Last();
-                    lastTextsection.CurrentLine.Append(GetText(comment,
+                    var text = GetText(comment,
                         lastTextsection.Type == CommentElement.Returns ||
-                        lastTextsection.Type == CommentElement.Param).Trim());
+                        lastTextsection.Type == CommentElement.Param).Trim();
+                    if (text.StartsWith("_safety", StringComparison.Ordinal))
+                        text = text.Replace("_safety", string.Empty).Trim();
+                    lastTextsection.CurrentLine.Append(text);
                     break;
                 case DocumentationCommentKind.InlineContentComment:
                     break;
